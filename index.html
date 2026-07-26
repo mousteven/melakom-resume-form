@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>應徵履歷表 — 菲律賓美佳人力仲介有限公司</title>
+<style>
+  :root{
+    --bg:#f6f5f1;
+    --surface:#ffffff;
+    --surface-2:#eef1ee;
+    --ink:#1c2430;
+    --ink-soft:#4b5563;
+    --ink-faint:#8791a0;
+    --accent:#1e4e8c;
+    --accent-ink:#ffffff;
+    --accent-soft:#e7edf6;
+    --danger:#b3261e;
+    --border:#d9d7cd;
+    --border-strong:#b9b6a8;
+    --focus:#1e4e8c;
+    --shadow:0 1px 3px rgba(20,20,10,.08), 0 1px 2px rgba(20,20,10,.05);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family: ui-sans-serif, "Segoe UI", "Noto Sans", "PingFang TC", Arial, sans-serif;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:28px 18px 80px;}
+  .wrap.summary-mode{max-width:900px;}
+  header.top{
+    padding:22px 24px 24px; background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; box-shadow:var(--shadow); margin-bottom:18px;
+  }
+  h1{font-size:21px; margin:2px 0 4px; font-weight:700;}
+  .sub{color:var(--ink-soft); font-size:13.5px; margin:0;}
+  .notice{
+    margin-top:14px; padding:12px 14px; border-radius:10px;
+    background:var(--accent-soft); border:1px solid var(--border);
+    font-size:13.5px; color:var(--ink); display:flex; gap:10px;
+  }
+
+  section.card{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:var(--shadow); margin-bottom:16px; overflow:hidden;
+  }
+  .card-head{
+    padding:14px 20px; background:var(--surface-2); border-bottom:1px solid var(--border);
+    display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+  }
+  .card-head h2{font-size:15.5px; margin:0; font-weight:700;}
+  .card-body{padding:18px 20px 20px;}
+
+  .grid{display:grid; grid-template-columns: repeat(2, 1fr); gap:14px 16px;}
+  .grid.g3{grid-template-columns: repeat(3, 1fr);}
+  .grid.g5{grid-template-columns: repeat(5, 1fr);}
+  .span2{grid-column: span 2;}
+  .span3{grid-column: span 3;}
+  @media (max-width:640px){
+    .grid, .grid.g3, .grid.g5{grid-template-columns:1fr;}
+    .span2,.span3{grid-column:span 1;}
+  }
+
+  label.field{display:flex; flex-direction:column; gap:4px;}
+  label.field .lab{font-size:13px; font-weight:600; color:var(--ink);}
+  label.field .lab .req{color:var(--danger); margin-left:2px;}
+
+  input, select, textarea{
+    font: inherit; font-size:14.5px; color:var(--ink); background:var(--surface);
+    border:1px solid var(--border-strong); border-radius:8px; padding:9px 10px; width:100%;
+  }
+  input:focus, select:focus, textarea:focus{outline:2px solid var(--focus); border-color:var(--focus);}
+  textarea{resize:vertical; min-height:64px;}
+
+  .photo-upload{display:flex; align-items:center; gap:16px;}
+  .photo-preview{
+    width:110px; height:140px; border:1.5px dashed var(--border-strong); border-radius:10px;
+    background:var(--surface-2); display:flex; align-items:center; justify-content:center;
+    font-size:12px; color:var(--ink-faint); overflow:hidden; flex:none; text-align:center;
+  }
+  .photo-preview img{width:100%; height:100%; object-fit:cover;}
+
+  .emprow{
+    border:1px solid var(--border); border-radius:10px; padding:12px 14px;
+    margin-bottom:10px; background:var(--surface-2); position:relative;
+  }
+  .emprow-num{
+    position:absolute; top:-10px; left:12px; background:var(--accent); color:var(--accent-ink);
+    font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px;
+  }
+
+  .radio-group{display:flex; gap:18px; flex-wrap:wrap;}
+  .radio-group label{display:flex; align-items:center; gap:6px; font-size:14px; font-weight:500;}
+  .radio-group input{width:auto;}
+
+  .certify{
+    display:flex; gap:10px; align-items:flex-start; padding:12px 14px;
+    background:var(--surface-2); border-radius:10px; border:1px solid var(--border); font-size:13.5px;
+  }
+  .certify input{width:18px; height:18px; margin-top:2px; flex:none;}
+
+  .actions{display:flex; justify-content:flex-end; gap:10px; margin-top:4px;}
+  button.primary{
+    background:var(--accent); color:var(--accent-ink); border:none; border-radius:10px;
+    padding:13px 26px; font-size:15px; font-weight:700; cursor:pointer; box-shadow:var(--shadow);
+  }
+  button.ghost{
+    background:none; border:1px solid var(--border-strong); color:var(--ink);
+    border-radius:10px; padding:13px 20px; font-size:14.5px; cursor:pointer;
+  }
+  .err-banner{
+    display:none; background:color-mix(in srgb, var(--danger) 12%, var(--surface));
+    border:1px solid var(--danger); color:var(--danger); border-radius:10px;
+    padding:11px 14px; font-size:13.5px; margin-bottom:14px;
+  }
+
+  /* ---- summary / rasterized sheet ---- */
+  #summaryView{display:none;}
+  .doc{background:var(--surface-2); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px;}
+  .doc-scroll{display:flex; justify-content:center; overflow-x:auto;}
+  .sheet-scale-wrap{position:relative; flex:none;}
+
+  .melakom-sheet{
+    position:relative; width:794px; padding:36px 40px 40px; background:#fff; color:#000;
+    font-family: "Calibri", "Segoe UI", Arial, sans-serif; box-shadow:0 2px 18px -6px rgba(0,0,0,.35);
+  }
+  .melakom-sheet .t{display:inline-block; white-space:pre-wrap;}
+  .melakom-sheet .t.b{font-weight:700;}
+  .melakom-sheet .row{margin-bottom:7px; font-size:13px;}
+  .melakom-sheet .photo-box{
+    position:absolute; top:36px; right:40px; width:100px; height:130px;
+  }
+  .melakom-sheet .photo-box.box{display:flex; align-items:center; justify-content:center;}
+  .melakom-sheet .rule{height:1.5px; background:#000; margin:10px 0 12px;}
+  .melakom-sheet .box{border:1px solid #000;}
+  .melakom-sheet table{border-collapse:collapse; width:100%; margin:8px 0 4px; font-size:12px;}
+  .melakom-sheet table td, .melakom-sheet table th{border:1px solid #000; padding:5px 6px; vertical-align:top;}
+  .melakom-sheet table th{background:#e8e8e8; font-weight:700; font-size:11.5px;}
+  .melakom-sheet .headtitle{font-size:15px; font-weight:700; margin-bottom:2px;}
+  .melakom-sheet .headlic{font-size:11.5px; margin-bottom:14px;}
+  .melakom-sheet .certtext{font-size:10.5px; font-style:italic; margin-top:14px; line-height:1.5;}
+
+  footer.foot{text-align:center; color:var(--ink-faint); font-size:12px; margin-top:26px;}
+</style>
+
+<div class="wrap" id="wrap">
+
+  <header class="top">
+    <h1>應徵履歷表 Application Resume</h1>
+    <p class="sub">菲律賓美佳人力仲介有限公司 POEA License No. 130-LB-072320-R</p>
+    <div class="notice">
+      <span>📩</span>
+      <span>填寫完成後會自動產生一張履歷圖片並通知仲介公司,你也可以下載留底。<br>After submitting, a resume image is generated automatically and sent to the agency. You can also download a copy for yourself.</span>
+    </div>
+  </header>
+
+  <div class="err-banner" id="errBanner">請完成必填欄位(含大頭照與姓名)。/ Please complete the required fields (including photo and name).</div>
+
+  <form id="resumeForm" novalidate>
+
+    <section class="card">
+      <div class="card-head"><h2>大頭照 Photo</h2></div>
+      <div class="card-body">
+        <div class="photo-upload">
+          <div class="photo-preview" id="photoPreview">尚未上傳<br>No photo</div>
+          <label class="field" style="flex:1;">
+            <span class="lab">上傳照片 Upload Photo <span class="req">*</span></span>
+            <input type="file" id="photoInput" accept="image/*" required>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>基本資料 Basic Information</h2></div>
+      <div class="card-body">
+        <div class="grid">
+          <label class="field span2"><span class="lab">姓名 Name <span class="req">*</span></span><input name="name" required></label>
+          <label class="field"><span class="lab">年齡 Age</span><input name="age" type="number" min="0"></label>
+          <label class="field"><span class="lab">出生年月日 Birthdate (YYYY/MM/DD)</span><input name="birthdate" type="date"></label>
+          <label class="field"><span class="lab">性別 Gender</span>
+            <select name="gender"><option value=""></option><option>Male</option><option>Female</option></select>
+          </label>
+          <label class="field"><span class="lab">電話 Cel. No.</span><input name="cellphone"></label>
+          <label class="field span2"><span class="lab">出生地 Birthplace</span><input name="birthplace"></label>
+          <label class="field span2"><span class="lab">居住地址 Home Address</span><input name="homeAddress"></label>
+          <label class="field"><span class="lab">宗教 Religion</span><input name="religion"></label>
+          <label class="field"><span class="lab">身高 Height</span><input name="height" placeholder="e.g. 165cm"></label>
+          <label class="field"><span class="lab">體重 Weight</span><input name="weight" placeholder="e.g. 55kg"></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>家庭狀況 Family Information</h2></div>
+      <div class="card-body">
+        <div class="grid">
+          <label class="field"><span class="lab">婚姻狀態 Marital Status</span>
+            <select name="marital"><option value=""></option><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option><option>Divorced</option></select>
+          </label>
+          <label class="field"><span class="lab">配偶姓名 Name of Spouse</span><input name="spouseName"></label>
+          <label class="field"><span class="lab">配偶職業 Spouse Occupation</span><input name="spouseJob"></label>
+          <label class="field"><span class="lab">子女數 No. of Children</span><input name="numChildren" type="number" min="0"></label>
+          <label class="field"><span class="lab">子女年齡 Age of Children</span><input name="childrenAges" placeholder="e.g. 5, 8, 12"></label>
+          <label class="field"><span class="lab">父親姓名 Father's Name</span><input name="fatherName"></label>
+          <label class="field"><span class="lab">母親姓名 Mother's Name</span><input name="motherName"></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>學歷 Education</h2></div>
+      <div class="card-body">
+        <div class="grid">
+          <label class="field"><span class="lab">最高學歷 Highest Education</span>
+            <select name="education"><option value=""></option><option>Elementary</option><option>High School</option><option>Vocational</option><option>College</option><option>Graduate</option></select>
+          </label>
+          <label class="field"><span class="lab">學業狀態 Education Status</span>
+            <select name="educationStatus"><option value=""></option><option>Graduate</option><option>Undergraduate</option><option>Ongoing</option></select>
+          </label>
+          <label class="field"><span class="lab">修業年限 No. of Years</span><input name="numYears" type="number" min="0"></label>
+          <label class="field"><span class="lab">科系 Course</span><input name="course"></label>
+          <label class="field span2"><span class="lab">特別專長 Special Skills</span><textarea name="specialSkills"></textarea></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>工作經驗 Employment Records</h2><span style="font-size:12.5px;color:var(--ink-faint);">最多4筆,由近至遠 / up to 4, most recent first</span></div>
+      <div class="card-body" id="empList"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>其他 Other</h2></div>
+      <div class="card-body">
+        <div class="grid g3">
+          <label class="field"><span class="lab">你有抽煙嗎? Do you smoke?</span>
+            <div class="radio-group"><label><input type="radio" name="smoking" value="Yes">Yes</label><label><input type="radio" name="smoking" value="No" checked>No</label></div>
+          </label>
+          <label class="field"><span class="lab">你有喝酒嗎? Do you drink alcohol?</span>
+            <div class="radio-group"><label><input type="radio" name="drinking" value="Yes">Yes</label><label><input type="radio" name="drinking" value="No" checked>No</label></div>
+          </label>
+          <label class="field"><span class="lab">慣用手 Handedness</span>
+            <div class="radio-group"><label><input type="radio" name="hand" value="Right" checked>Right</label><label><input type="radio" name="hand" value="Left">Left</label></div>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-body">
+        <div class="certify">
+          <input type="checkbox" id="certifyBox" required>
+          <label for="certifyBox">I HEREBY CERTIFY that the above information is true and correct. I understand that any false information provided may result in the termination of my application or employment, and I will take full responsibility for being sent back.</label>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button type="submit" class="primary" id="submitBtn">送出 Submit</button>
+    </div>
+  </form>
+
+  <div id="summaryView">
+    <div class="doc">
+      <div class="doc-scroll">
+        <div class="sheet-scale-wrap" id="sheetScaleWrap"></div>
+      </div>
+    </div>
+    <div id="submitStatus" style="text-align:center; font-size:14px; color:var(--ink-soft); margin-bottom:14px;"></div>
+    <div class="actions" style="justify-content:center;">
+      <button type="button" class="ghost" id="downloadImgBtn">⬇ 下載圖片 Download as Image</button>
+    </div>
+  </div>
+
+  <footer class="foot">菲律賓美佳人力仲介有限公司 · POEA License No. 130-LB-072320-R</footer>
+</div>
+
+<script>
+(function(){
+
+  // ---------- employment rows ----------
+  const empList = document.getElementById('empList');
+  const MAX_EMP = 4;
+  function addEmpRow(idx){
+    const div = document.createElement('div');
+    div.className = 'emprow';
+    div.dataset.idx = idx;
+    div.innerHTML = `
+      <span class="emprow-num">${idx}</span>
+      <div class="grid g5">
+        <label class="field"><span class="lab">工作期間 Duration</span><input name="empDuration${idx}" placeholder="2020-2022"></label>
+        <label class="field"><span class="lab">職務 Job Title</span><input name="empTitle${idx}"></label>
+        <label class="field"><span class="lab">公司名稱 Company</span><input name="empCompany${idx}"></label>
+        <label class="field"><span class="lab">國家 Country</span><input name="empCountry${idx}"></label>
+        <label class="field"><span class="lab">離職原因 Reason for Leaving</span><input name="empReason${idx}"></label>
+      </div>`;
+    empList.appendChild(div);
+  }
+  for (let i = 1; i <= MAX_EMP; i++) addEmpRow(i);
+
+  // ---------- photo upload ----------
+  const photoInput = document.getElementById('photoInput');
+  const photoPreview = document.getElementById('photoPreview');
+  let photoDataUrl = null;
+  photoInput.addEventListener('change', () => {
+    const file = photoInput.files && photoInput.files[0];
+    if (!file) { photoDataUrl = null; photoPreview.innerHTML = '尚未上傳<br>No photo'; return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      photoDataUrl = reader.result;
+      photoPreview.innerHTML = `<img src="${photoDataUrl}" alt="preview">`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ---------- collect ----------
+  function esc(s){ return (s == null ? '' : String(s)).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+  function collect(){
+    const form = document.getElementById('resumeForm');
+    const fd = new FormData(form);
+    const data = {};
+    for (const [k, v] of fd.entries()) if (!(k in data)) data[k] = v;
+    // radios default to "No"/"Right" via checked attr, FormData already covers it
+    data.photo = photoDataUrl;
+    data.appliedDate = new Date().toISOString().slice(0, 10);
+    data.position = 'Factory Worker';
+    data.referredBy = 'Reiley';
+    return data;
+  }
+
+  function fmtDate(iso){
+    if (!iso) return '';
+    const parts = iso.split('-');
+    return parts.length === 3 ? `${parts[0]}/${parts[1]}/${parts[2]}` : iso;
+  }
+
+  // ---------- render printable sheet ----------
+  function field(label, value){
+    return `<span class="t">${esc(label)}: </span><span class="t b">${esc(value || '____________')}</span>`;
+  }
+
+  function renderSheet(data){
+    const emp = [];
+    for (let i = 1; i <= MAX_EMP; i++){
+      const title = data['empTitle'+i], company = data['empCompany'+i];
+      if (!title && !company) continue;
+      emp.push(`<tr>
+        <td class="t">${esc(data['empDuration'+i])}</td>
+        <td class="t">${esc(title)}</td>
+        <td class="t">${esc(company)}</td>
+        <td class="t">${esc(data['empCountry'+i])}</td>
+        <td class="t">${esc(data['empReason'+i])}</td>
+      </tr>`);
+    }
+    if (!emp.length) emp.push('<tr><td class="t">&nbsp;</td><td class="t"></td><td class="t"></td><td class="t"></td><td class="t"></td></tr>');
+
+    const html = `
+      <div class="photo-box box">${data.photo ? `<img class="photo-img" src="${data.photo}" style="width:100%;height:100%;object-fit:cover;">` : ''}</div>
+      <div class="headtitle t b">菲律賓美佳人力仲介有限公司</div>
+      <div class="headlic t">POEA License No. 130-LB-072320-R</div>
+      <div class="row box" style="display:inline-block;padding:4px 10px;">
+        <span class="t b">☑ 廠工(Factory Worker)</span>
+        <span class="t" style="margin-left:24px;">Reference Number: __________</span>
+      </div>
+      <div class="rule"></div>
+
+      <div class="row">1. ${field('姓名 Name', data.name)}&nbsp;&nbsp;&nbsp;<span class="t">Referred by: </span><span class="t b">Reiley</span></div>
+      <div class="row">2. ${field('年齡 Age', data.age)}&nbsp;&nbsp;&nbsp;${field('出生年月日 Birthdate', fmtDate(data.birthdate))}</div>
+      <div class="row">3. ${field('性別 Gender', data.gender)}&nbsp;&nbsp;&nbsp;${field('電話 Cel. No.', data.cellphone)}</div>
+      <div class="row">4. ${field('出生地 Birthplace', data.birthplace)}</div>
+      <div class="row">5. ${field('居住地址 Home Address', data.homeAddress)}</div>
+      <div class="row">6. ${field('宗教 Religion', data.religion)}&nbsp;&nbsp;&nbsp;${field('身高 Height', data.height)}&nbsp;&nbsp;&nbsp;${field('體重 Weight', data.weight)}</div>
+      <div class="row">7. ${field('婚姻狀態 Marital Status', data.marital)}</div>
+      <div class="row">8. ${field('配偶姓名 Name of spouse', data.spouseName)}&nbsp;&nbsp;&nbsp;${field('職業 Occupation', data.spouseJob)}</div>
+      <div class="row">9. ${field('子女數 No. of Children', data.numChildren)}&nbsp;&nbsp;&nbsp;${field('年齡 Age', data.childrenAges)}</div>
+      <div class="row">10. ${field("父親姓名 Father's name", data.fatherName)}&nbsp;&nbsp;&nbsp;${field("母親姓名 Mother's name", data.motherName)}</div>
+      <div class="row">11. ${field('最高學歷 Highest Education', data.education)}&nbsp;&nbsp;&nbsp;${field('學業狀態 Education Status', data.educationStatus)}&nbsp;&nbsp;&nbsp;${field('修業年限 No. of years', data.numYears)}&nbsp;&nbsp;&nbsp;${field('科系 Course', data.course)}</div>
+      <div class="row">12. ${field('特別專長 Special Skills', data.specialSkills)}</div>
+
+      <div class="row t b" style="margin-top:10px;">工作經驗 EMPLOYMENT RECORDS</div>
+      <table>
+        <tr><th>工作期間 DURATION</th><th>職務 JOB TITLE</th><th>公司名稱 COMPANY NAME</th><th>國家 COUNTRY</th><th>離職原因 Reason for Leaving</th></tr>
+        ${emp.join('')}
+      </table>
+
+      <div class="row" style="margin-top:6px;">
+        ${field('你有抽煙嗎 Do you smoke?', data.smoking)}&nbsp;&nbsp;&nbsp;
+        ${field('您有喝酒嗎 Do you drink alcohol?', data.drinking)}&nbsp;&nbsp;&nbsp;
+        ${field('慣用手 Right or left handed?', data.hand)}
+      </div>
+
+      <div class="certtext t">* I HEREBY CERTIFY that the above information is true and correct. I understand that any false information provided may result in the termination of my application or employment, and I will take full responsibility for being sent back.</div>
+      <div class="row t" style="margin-top:10px;">Applied Date: <span class="t b">${esc(data.appliedDate)}</span></div>
+    `;
+    document.getElementById('sheetScaleWrap').innerHTML = `<div class="melakom-sheet">${html}</div>`;
+  }
+
+  // ---------- rasterize to PNG (reads actual rendered DOM positions) ----------
+  async function sheetToPngBlob(scale){
+    if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch(e){} }
+    const sheet = document.querySelector('.melakom-sheet');
+    const sheetRect = sheet.getBoundingClientRect();
+    const wPx = sheetRect.width, hPx = sheetRect.height;
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(wPx*scale);
+    canvas.height = Math.round(hPx*scale);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.scale(scale, scale);
+
+    function rel(el){
+      const r = el.getBoundingClientRect();
+      return { x: r.left - sheetRect.left, y: r.top - sheetRect.top, w: r.width, h: r.height };
+    }
+
+    sheet.querySelectorAll('.rule').forEach(el => {
+      const r = rel(el);
+      ctx.fillStyle = '#000';
+      ctx.fillRect(r.x, r.y, r.w, Math.max(1, r.h));
+    });
+    sheet.querySelectorAll('.box, table, table td, table th').forEach(el => {
+      const r = rel(el);
+      const cs = getComputedStyle(el);
+      const lw = parseFloat(cs.borderTopWidth) || 1;
+      if (cs.backgroundColor && cs.backgroundColor !== 'rgba(0, 0, 0, 0)' && cs.backgroundColor !== 'transparent'){
+        ctx.fillStyle = cs.backgroundColor;
+        ctx.fillRect(r.x, r.y, r.w, r.h);
+      }
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = lw;
+      ctx.strokeRect(r.x + lw/2, r.y + lw/2, r.w - lw, r.h - lw);
+    });
+    for (const el of sheet.querySelectorAll('.photo-img')) {
+      const r = rel(el);
+      const img = new Image();
+      await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; img.src = el.src; });
+      ctx.drawImage(img, r.x, r.y, r.w, r.h);
+    }
+    sheet.querySelectorAll('.t').forEach(el => {
+      // only draw the direct text of this element, skip if it has element children (avoid double count)
+      if (el.children.length) return;
+      const r = rel(el);
+      if (r.w === 0 && r.h === 0) return;
+      const cs = getComputedStyle(el);
+      const size = parseFloat(cs.fontSize);
+      const isBold = parseInt(cs.fontWeight, 10) >= 600;
+      const isItalic = cs.fontStyle === 'italic';
+      ctx.fillStyle = cs.color;
+      ctx.font = `${isItalic ? 'italic ' : ''}${isBold ? '700 ' : ''}${size}px ${cs.fontFamily}`;
+      ctx.textBaseline = 'top';
+      const text = el.textContent;
+      const maxW = r.w > 0 ? r.w * 3 : 700;
+      ctx.fillText(text, r.x, r.y, maxW);
+    });
+
+    return await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+  }
+
+  function blobToBase64_(blob){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(String(reader.result).split(',')[1] || '');
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  const AGENCY_PLATFORM_URL = 'https://script.google.com/macros/s/AKfycbzSZ5P33WVIrJKpD9o3FRdQYQI3sPGznFFQvHgc0S3KT90LtyH7iAeFNSnMd1a1No1Q/exec';
+
+  async function logToAgencyPlatform(data, blob){
+    let imageBase64 = null;
+    try { if (blob) imageBase64 = await blobToBase64_(blob); } catch (e) {}
+    return fetch(AGENCY_PLATFORM_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ formType: 'melakom', data, imageBase64 })
+    });
+  }
+
+  let pendingBlob = null;
+
+  document.getElementById('resumeForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const certified = document.getElementById('certifyBox').checked;
+    if (!form.checkValidity() || !photoDataUrl || !certified){
+      document.getElementById('errBanner').style.display = 'block';
+      if (!form.checkValidity()) form.reportValidity();
+      window.scrollTo({top:0, behavior:'smooth'});
+      return;
+    }
+    document.getElementById('errBanner').style.display = 'none';
+
+    const data = collect();
+    renderSheet(data);
+    document.getElementById('resumeForm').style.display = 'none';
+    document.getElementById('summaryView').style.display = 'block';
+    document.getElementById('wrap').classList.add('summary-mode');
+    window.scrollTo({top:0, behavior:'smooth'});
+
+    const statusEl = document.getElementById('submitStatus');
+    statusEl.textContent = '產生圖片並送出中... Generating image and submitting...';
+
+    try {
+      pendingBlob = await sheetToPngBlob(2);
+      await logToAgencyPlatform(data, pendingBlob);
+      statusEl.textContent = '✓ 已送出,仲介公司會盡快與你聯絡。/ Submitted — the agency will contact you soon.';
+    } catch (err) {
+      statusEl.textContent = '送出時發生問題,請截圖這頁面並透過其他方式聯絡仲介。/ Something went wrong submitting — please screenshot this page and contact the agency another way.';
+    }
+  });
+
+  document.getElementById('downloadImgBtn').addEventListener('click', async () => {
+    const blob = pendingBlob || await sheetToPngBlob(2);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Resume-' + (document.querySelector('[name="name"]').value || 'applicant').replace(/[^a-z0-9]+/gi,'_') + '.png';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  });
+
+})();
+</script>
+</html>
