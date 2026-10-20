@@ -471,7 +471,10 @@
     });
   }
 
-  const AGENCY_PLATFORM_URL = 'https://script.google.com/macros/s/AKfycbzSZ5P33WVIrJKpD9o3FRdQYQI3sPGznFFQvHgc0S3KT90LtyH7iAeFNSnMd1a1No1Q/exec';
+  /* 2026-10-20：從舊版後端（移工服務平台 v1）改指向 v2。
+     v1 收了資料但不會通知他，v2 補上了寄信（notifyAdmin_）。
+     兩版寫的是同一本試算表 1hGfSO7D…，所以舊資料跟新資料還是在一起。 */
+  const AGENCY_PLATFORM_URL = 'https://script.google.com/macros/s/AKfycbycLQO2yrDYoKEl0DwIC07-Ll8nuLCxrIUhawIrBH1aWbIyislfe9VsonWBW8zYbdudSA/exec';
 
   async function logToAgencyPlatform(data, blob){
     let imageBase64 = null;
