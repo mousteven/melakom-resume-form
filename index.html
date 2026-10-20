@@ -282,6 +282,12 @@
 <script>
 (function(){
 
+  /* 這份表單是誰轉介來的，從網址的 ?ref= 讀。
+     Grace 轉給求職者的連結是 ?ref=grace，印出來的履歷就會寫 Referred by : Grace。
+     沒帶參數（他自己或 Railey 在用的那條）維持原本的 Reiley。 */
+  const REFERRERS = { grace: 'Grace', mina: 'MINA', reiley: 'Reiley' };
+  const REFERRED_BY = REFERRERS[(new URLSearchParams(location.search).get('ref') || '').toLowerCase()] || 'Reiley';
+
   // ---------- employment rows ----------
   const empList = document.getElementById('empList');
   const MAX_EMP = 4;
@@ -329,7 +335,7 @@
     data.photo = photoDataUrl;
     data.appliedDate = new Date().toISOString().slice(0, 10);
     data.position = 'Factory Worker';
-    data.referredBy = 'Reiley';
+    data.referredBy = REFERRED_BY;
     return data;
   }
 
@@ -369,7 +375,7 @@
       </div>
       <div class="rule"></div>
 
-      <div class="row">1. ${field('姓名 Name', data.name)}&nbsp;&nbsp;&nbsp;<span class="t">Referred by: </span><span class="t b">Reiley</span></div>
+      <div class="row">1. ${field('姓名 Name', data.name)}&nbsp;&nbsp;&nbsp;<span class="t">Referred by: </span><span class="t b">${esc(REFERRED_BY)}</span></div>
       <div class="row">2. ${field('年齡 Age', data.age)}&nbsp;&nbsp;&nbsp;${field('出生年月日 Birthdate', fmtDate(data.birthdate))}</div>
       <div class="row">3. ${field('性別 Gender', data.gender)}&nbsp;&nbsp;&nbsp;${field('電話 Cel. No.', data.cellphone)}</div>
       <div class="row">4. ${field('出生地 Birthplace', data.birthplace)}</div>
@@ -486,6 +492,22 @@
     });
   }
 
+  /* 2026-10-21：真正的履歷 PDF 由這支產生 —— 它會拿 Google 文件範本 melakom_mina
+     套版、把大頭照貼進右上角、轉成 PDF 再寄到仲介的信箱。
+     上面那支（移工服務平台）只負責把資料寫進試算表，兩支都要送。 */
+  const BIODATA_MAILER_URL = 'https://script.google.com/macros/s/AKfycbxnunxG8EpJnT9-L1PKci-JXqB4mM7Hbjwy1HWgcAjTzp_OMTa8ZLcbf-4AW-_7DA23aw/exec';
+
+  async function mailBiodataPdf(data){
+    const res = await fetch(BIODATA_MAILER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ referredBy: REFERRED_BY, photo: data.photo, data })
+    });
+    const out = await res.json();
+    if (!out || !out.ok) throw new Error('mailer: ' + (out && out.error));
+    return out;
+  }
+
   let pendingBlob = null;
 
   document.getElementById('resumeForm').addEventListener('submit', async (e) => {
@@ -513,6 +535,9 @@
     try {
       pendingBlob = await sheetToPngBlob(2);
       await logToAgencyPlatform(data, pendingBlob);
+      /* 履歷 PDF 寄失敗不影響求職者 —— 資料已經存進試算表，平台那支也會寄一封通知信，
+         所以這裡吞掉錯誤，不要讓應徵者以為自己白填了。*/
+      try { await mailBiodataPdf(data); } catch (e) {}
       statusEl.textContent = '✓ 已送出,仲介公司會盡快與你聯絡。/ Submitted — the agency will contact you soon.';
     } catch (err) {
       statusEl.textContent = '送出時發生問題,請截圖這頁面並透過其他方式聯絡仲介。/ Something went wrong submitting — please screenshot this page and contact the agency another way.';
